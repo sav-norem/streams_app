@@ -27,12 +27,24 @@ while(True):
             current_review_details = review[1][0][1]
             name = current_review_details['restaurant']
             rating = int(current_review_details['rating'])
+            text_review = current_review_details['text_review']
             r.lpush(name, rating)
             sum_reviews = sum([int(x) for x in r.lrange(name, 0, -1)])
             num_reviews = r.llen(name)
             avg_rating = sum_reviews / num_reviews
             r.zadd('avg_reviews', {name: avg_rating})
             print(r.zscore('avg_reviews', name))
+
+            if rating <= 2:
+                print("adding low review")
+                r.xadd('low_reviews', {'restaurant': name, 'text_review': text_review})
+            elif rating == 3:
+                print("adding mid review")
+                r.xadd('mid_reviews', {'restaurant': name, 'text_review': text_review})
+            else:
+                print("adding high review")
+                r.xadd('high_review', {'restaurant': name, 'text_review': text_review})
+
         else:
             print("no jobs in response")
     
