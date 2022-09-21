@@ -2,19 +2,33 @@ import redis
 import random
 import time
 
+restaurants = [
+    "savannah's spot",
+    "justin's joint",
+    "guy's gastropub",
+    "conrad's indian and soul food",
+    "simon's soul food"
+]
+
+low_reviews = ['bleh', 'poor', 'mediocre', 'meh', '']
+mid_reviews = ['average', 'fine', 'meets expectations', '']
+high_reviews = ['great', 'excellent', 'wonderful', '']
+
+
 STREAM_KEY = 'reviews'
 
 r = redis.Redis(decode_responses=True)
 
 while True:
-    print("Restaurant name: ")
-    name = input()
-    print("Rating (1-5):")
-    rating = int(input())
     try:
-        assert (rating in [1,2,3,4,5])
-        print("leave a text review")
-        text_review = input()
+        name = random.choice(restaurants)
+        rating = random.randint(1,5)
+        if rating <= 2:
+            text_review = random.choice(low_reviews)
+        elif rating == 3:
+            text_review = random.choice(mid_reviews)
+        else:
+            text_review = random.choice(high_reviews)
 
         review = {
             "restaurant": name,
@@ -26,4 +40,6 @@ while True:
         print(f"Created rating {review_id}:")
     
     except:
-        print("Not a 1-5 rating - try again")
+        print("could not add to stream")
+
+    time.sleep(random.randint(5, 15))
