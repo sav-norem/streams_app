@@ -36,6 +36,9 @@ while True:
             "text_review": text_review
         }
 
+        # Generate a unique key with restaurantName_rating_<actual_rating> and increase its value by 1.If no key exists a default of 1 will be added else existing will be updated
+        r.hincrby(name+"_"+"rating_"+rating,1)
+
         review_id = r.xadd(STREAM_KEY, review)
         print(f"Created rating {review_id}:")
     
