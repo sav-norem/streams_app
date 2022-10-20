@@ -22,6 +22,8 @@ def is_not_questionable_review(rating, name, text_review, review_id):
         if text_review == '':
             r.xdel(STREAM1_KEY, review_id)
             return False
+        else:
+            return True
 
 def process_text_review(response):
     review = response[0]

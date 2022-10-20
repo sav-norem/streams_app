@@ -28,4 +28,4 @@ while True:
     except:
         print("Could not add to stream")
 
-    time.sleep(random.randint(5, 15))
+    time.sleep(random.randint(1, 10))

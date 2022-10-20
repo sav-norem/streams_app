@@ -10,9 +10,9 @@ restaurants = [
     "simon's soul food"
 ]
 
-low_reviews = ['bleh', 'poor', 'mediocre', 'meh', '']
-mid_reviews = ['average', 'fine', 'meets expectations', '']
-high_reviews = ['great', 'excellent', 'wonderful', '']
+low_reviews = ['bleh', 'poor', 'mediocre', 'meh']
+mid_reviews = ['average', 'fine', 'meets expectations']
+high_reviews = ['great', 'excellent', 'wonderful']
 
 
 STREAM_KEY = 'reviews'
@@ -45,4 +45,4 @@ while True:
     except:
         print("could not add to stream")
 
-    time.sleep(random.randint(5, 15))
+    time.sleep(random.randint(1, 5))

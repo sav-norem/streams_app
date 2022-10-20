@@ -3,6 +3,7 @@ from typing import Container
 import redis
 import collections
 import sys
+from nltk.corpus import stopwords
 
 STREAM_KEY = sys.argv[1]
 CONSUMER_GROUP_NAME = sys.argv[2]
@@ -31,7 +32,10 @@ while(True):
                 print(f"topk for {name_stream} already exists")
             list_desc = desc.split(" ")
             for word in list_desc:
-                r.topk().add(name_stream, word)       
+                if word not in stopwords:
+                    r.topk().add(name_stream, word)
+                else:
+                    continue
                 
             print(r.topk().list(name_stream))
 

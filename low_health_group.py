@@ -21,5 +21,6 @@ while True:
         review = response[0]
         current_review_details = review[1][0][1]
         name = current_review_details['restaurant']
-        score = int(current_review_details['health_score'])
-        avg_review = int(current_review_details['avg_review'])
+        score = current_review_details['health_score']
+        avg_review = current_review_details['avg_review']
+        r.publish('news', f"{avg_review} star restaurant - {name} gets {score} on health review!")
