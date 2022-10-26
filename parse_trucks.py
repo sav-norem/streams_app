@@ -36,7 +36,6 @@ for truck in trucks:
     else:
         truck_data = {}
         truck_data['cuisines'] = truck['cuisines']
-        truck_data['events'] = truck['events']
         truck_data['id'] = truck['id']
         truck_data['name'] = truck['name']
         truck_data['primary_cuisine'] = truck['primary_cuisine']
@@ -47,13 +46,14 @@ for truck in trucks:
         if location:
             truck_data['vendor_lat'] = location.latitude
             truck_data['vendor_lon'] = location.longitude
-        
+            r.geoadd('truck_locations', (location.longitude, location.latitude, truck['name']))
+            n = truck['name']
+            truck_data['restaurants_walkable'] = r.geosearchstore(f'close_to_{n}', 'truck_locations', member=truck['name'], radius=2, unit='mi')
+            print(truck_data['restaurants_walkable'])
+            new_truck = Vendor(**truck_data)
+            new_truck.save()
+            r.lpush('restaurant_list', truck['name'])
         else:
-            continue
-
-        new_truck = Vendor(**truck_data)
-        new_truck.save()
-        geo_name = new_truck.pk
-        r.geoadd('truck_locations', (location.longitude, location.latitude, geo_name))
+            pass
 
 asyncio.run(Migrator().run())

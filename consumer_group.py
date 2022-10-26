@@ -12,18 +12,18 @@ CONSUMER_NAME = sys.argv[1]
 
 r = redis.Redis(decode_responses=True)
 
-def is_not_questionable_review(rating, name, text_review, review_id):
-    if rating > 3:
-        return True
-    else:
-        avg = r.zscore('avg_reviews', name)
-        if avg < 3: 
-            return True
-        if text_review == '':
-            r.xdel(STREAM1_KEY, review_id)
-            return False
-        else:
-            return True
+#def is_not_questionable_review(rating, name, text_review, review_id):
+#    if rating > 3:
+#        return True
+#    else:
+#        avg = r.zscore('avg_reviews', name)
+#        if avg < 3: 
+#            return True
+#        if text_review == '':
+#            r.xdel(STREAM1_KEY, review_id)
+#            return False
+#        else:
+#            return True
 
 def process_text_review(response):
     review = response[0]
@@ -32,23 +32,22 @@ def process_text_review(response):
     name = current_review_details['restaurant']
     rating = int(current_review_details['rating'])
     text_review = current_review_details['text_review']
-    if is_not_questionable_review(rating, name, text_review, current_review_id):
-        r.lpush(name, rating)
-        sum_reviews = sum([int(x) for x in r.lrange(name, 0, -1)])
-        num_reviews = r.llen(name)
-        avg_rating = sum_reviews / num_reviews
-        r.zadd('avg_reviews', {name: avg_rating})
-        print(r.zscore('avg_reviews', name))
+    r.lpush(name, rating)
+    sum_reviews = sum([int(x) for x in r.lrange(name, 0, -1)])
+    num_reviews = r.llen(name)
+    avg_rating = sum_reviews / num_reviews
+    r.zadd('avg_reviews', {name: avg_rating})
+    print(r.zscore('avg_reviews', name))
 
-        if rating <= 2:
-            print("adding low review")
-            r.xadd('low_reviews', {'restaurant': name, 'text_review': text_review})
-        elif rating == 3:
-            print("adding mid review")
-            r.xadd('mid_reviews', {'restaurant': name, 'text_review': text_review})
-        else:
-            print("adding high review")
-            r.xadd('high_review', {'restaurant': name, 'text_review': text_review})
+    if rating <= 2:
+        print("adding low review")
+        r.xadd('low_reviews', {'restaurant': name, 'text_review': text_review})
+    elif rating == 3:
+        print("adding mid review")
+        r.xadd('mid_reviews', {'restaurant': name, 'text_review': text_review})
+    else:
+        print("adding high review")
+        r.xadd('high_review', {'restaurant': name, 'text_review': text_review})
 
 def process_health_review(response):
     review = response[0]
