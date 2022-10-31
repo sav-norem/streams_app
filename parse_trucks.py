@@ -7,15 +7,7 @@ from aredis_om import Migrator
 from geopy.geocoders import Nominatim
 import redis
 
-#truck_data = {
-#    cuisines: List[str] = Field(index=True)
-#    events: List[str] = Field(index=True)
-#    id: str = Field(index=False)
-#    name: str = Field(index=True, full_text_search=True)
-#    primary_cuisine: str = Field(index=True)
-#    vendor_lon: decimal
-#    vendor_lat: decimal
-#}
+# parses the food truck data - gets longitude and latitude when available
 
 r = redis.Redis(
     host='localhost', 

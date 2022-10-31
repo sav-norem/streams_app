@@ -3,6 +3,9 @@ import redis
 import collections
 import sys
 
+# would publish a message when a highly rated restaurant gets a low health score
+# depricated since health reviews are for fake restaurants and ratings are for food trucks so these conditions are never met
+
 STREAM_KEY = 'low_health_good_reviews'
 CONSUMER_GROUP_NAME = 'notifications'
 CONSUMER_NAME = sys.argv[1]

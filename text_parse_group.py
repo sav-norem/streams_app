@@ -9,6 +9,9 @@ STREAM_KEY = sys.argv[1]
 CONSUMER_GROUP_NAME = sys.argv[2]
 CONSUMER_NAME = sys.argv[3]
 
+# this consumer group parses a text review to get rid of stop words and maintain a top-k structure of the most common words for each restaurant
+#   broken into sections for high, medium, and low reviews
+
 r = redis.Redis(decode_responses=True)
 
 try:

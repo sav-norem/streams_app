@@ -2,6 +2,8 @@ import redis
 import random
 import time
 
+# produces reviews for restaurants that have been added to the list
+
 r = redis.Redis(decode_responses=True)
 
 restaurants = r.lrange('restaurant_list', 0, -1)

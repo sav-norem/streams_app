@@ -2,6 +2,8 @@ import random
 import redis
 import time
 
+# a basic consumer for testing that is now deprecated
+
 STREAM_KEY = "jobs"
 
 r = redis.Redis(decode_responses=True)

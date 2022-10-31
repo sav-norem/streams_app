@@ -2,6 +2,8 @@ import redis
 import random
 import time
 
+# produces fake health reviews for fake restaurants - depricated since the reviews are now for the food trucks and not these fake restaurants
+
 restaurants = [
     "savannah's spot",
     "justin's joint",
