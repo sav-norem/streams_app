@@ -3,11 +3,15 @@
 ## tl;dr
 This app produces streams of reviews (currently ratings for restuarants and their health scores) and does some processing. If a highly rated restaurant gets a terrible health score, it publishes a messages to all the subsribers. There is also a top-k structure holding the most commonly used words in high/low/medium reviews for each restaurant. The data in the food trucks JSON gets translated into Redis Geospatial keys and can be used to find food trucks near given coordinates.
 
-## Up next freatures / fixes
-The food trucks are not currently the same restaurants that are getting health score reviews so the "low health group" is currently never going to be hit.
-Search function / find isn't working as expected with using the pk from OM as the name in Geo.
-Adding the number of close restaurants as they're being added should be giving us the wrong number since not all restaurants will have been added at that point in the code.
-
+## Steps to Run
+0. python3 -m pip install -r requirements.txt
+1. python3 parse_trucks.py
+2. python3 produce_health_reviews.py
+3. python3 producer.py
+4. python3 consumer_group.py {name_of_consumer}
+5. python3 low_health_group.py {name_of_consumer}
+6. python3 text_parse_group.py {name_of_consumer}
+7. uvicorn main:app --reload
 
 ## Streams
 Currently this project has a few streams being produced. The first round are 1-5 "star" reviews and 1-100 point health reviews. Those are then processed by our first consumer group. From there they get put on new streams, for high (4-5), medium (3), and low (1-2) star reviews. Those streams are processed and have a top-k structure keeping track of the top words used in each bucket for each restaurant - with generic stop words being taken out.
