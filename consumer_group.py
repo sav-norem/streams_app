@@ -12,7 +12,11 @@ CONSUMER_NAME = sys.argv[1]
 
 r = redis.Redis(decode_responses=True)
 
-#def is_not_questionable_review(rating, name, text_review, review_id):
+# lessons learned: flagging if a review is questionable is tough
+#       first reviews are extra tough because there's no baseline
+#       should there be a minimum # of reviews before any get flagged?
+# 
+# def is_not_questionable_review(rating, name, text_review, review_id):
 #    if rating > 3:
 #        return True
 #    else:

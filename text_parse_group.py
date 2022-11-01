@@ -5,9 +5,9 @@ import collections
 import sys
 from nltk.corpus import stopwords
 
-STREAM_KEY = sys.argv[1]
-CONSUMER_GROUP_NAME = sys.argv[2]
-CONSUMER_NAME = sys.argv[3]
+STREAM_KEY = 'reviews'
+CONSUMER_GROUP_NAME = 'staff'
+CONSUMER_NAME = sys.argv[1]
 
 # this consumer group parses a text review to get rid of stop words and maintain a top-k structure of the most common words for each restaurant
 #   broken into sections for high, medium, and low reviews

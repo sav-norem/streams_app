@@ -21,6 +21,8 @@ with open('food_trucks.json') as f:
 
 locator = Nominatim(user_agent="savannahs_stream_app")
 
+truck_list = []
+
 trucks = trucks['data']['vendors']
 for truck in trucks:
     if not truck['vendor_info']:
@@ -33,19 +35,21 @@ for truck in trucks:
         truck_data['primary_cuisine'] = truck['primary_cuisine']
 
         str_address = str(truck['vendor_info']['address']) + ", " + str(truck['vendor_info']['city']) + ", " + str(truck['vendor_info']['state'])
-        print(str_address)
         location = locator.geocode(str_address, timeout=500)
         if location:
             truck_data['vendor_lat'] = location.latitude
             truck_data['vendor_lon'] = location.longitude
             r.geoadd('truck_locations', (location.longitude, location.latitude, truck['name']))
             n = truck['name']
-            truck_data['restaurants_walkable'] = r.geosearchstore(f'close_to_{n}', 'truck_locations', member=truck['name'], radius=2, unit='mi')
-            print(truck_data['restaurants_walkable'])
             new_truck = Vendor(**truck_data)
             new_truck.save()
+            truck_list.append(n)
             r.lpush('restaurant_list', truck['name'])
         else:
             pass
+
+for food_truck in truck_list:
+    n = len(r.geosearch('truck_locations', member=food_truck, radius=2, unit='mi'))
+    r.zadd('num_close', {food_truck: n})
 
 asyncio.run(Migrator().run())

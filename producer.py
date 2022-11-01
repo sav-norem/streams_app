@@ -7,7 +7,6 @@ import time
 r = redis.Redis(decode_responses=True)
 
 restaurants = r.lrange('restaurant_list', 0, -1)
-print(restaurants)
 
 low_reviews = ['bleh', 'poor', 'mediocre', 'meh']
 mid_reviews = ['average', 'fine', 'meets expectations']
